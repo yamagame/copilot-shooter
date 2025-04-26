@@ -5,7 +5,7 @@ GitHub Copilot と Pyxel で作成したサンプルシューティングゲー�
 デモ : [https://yamagame.github.io/copilot-shooter](https://yamagame.github.io/copilot-shooter)
 
 以下、作成に使用したChat。モデルは ChatGPT 4o。
-多少手直ししてるものの、ほぼコピペ
+多少手直ししてるものの、ほぼコピペで作成
 
 - shooter/shooter.py を書き換えて Pyxel で書かれたシューティングゲームを作って
 - PlayerとBulletとEnemyを別のクラスにして

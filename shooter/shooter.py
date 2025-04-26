@@ -216,7 +216,7 @@ class ShooterGame:
             fragment.draw()
 
         if self.game_state == "TITLE":
-            pyxel.text(70, 60, "SHOOTER GAME", pyxel.frame_count % 16)
+            pyxel.text(70, 60, "COPILOT-SHOOTER", pyxel.frame_count % 16)
             pyxel.text(50, 90, "PRESS SPACE TO START", 7)
             pyxel.text(50, 110, f"BEST SCORE: {self.best_score}", 7)
 

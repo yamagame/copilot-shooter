@@ -9,9 +9,9 @@ class Player:
         self.height = 8
 
     def move(self):
-        if pyxel.btn(pyxel.KEY_LEFT) and self.x > 0:
+        if (pyxel.btn(pyxel.KEY_LEFT) or pyxel.btn( pyxel.GAMEPAD1_BUTTON_DPAD_LEFT )) and self.x > 0:
             self.x -= 2
-        if pyxel.btn(pyxel.KEY_RIGHT) and self.x < pyxel.width - self.width:
+        if (pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btn( pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT )) and self.x < pyxel.width - self.width:
             self.x += 2
 
     def draw(self):

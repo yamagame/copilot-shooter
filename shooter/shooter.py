@@ -51,7 +51,7 @@ class ShooterGame:
         self.score = 0
         self.game_over_timer = 0  # Reset the game over timer
         self.game_state = "PLAYING"
-
+    
     def create_explosion(self, x, y):
         """Create a large explosion effect at the given position."""
         for _ in range(50):  # Generate 50 fragments for the explosion
@@ -60,12 +60,22 @@ class ShooterGame:
         pyxel.play(1, 1)  # Play explosion sound
 
     def update(self):
+        pushedStart = pyxel.btnp(pyxel.GAMEPAD1_BUTTON_START)
+        pushedShot = any(
+            pyxel.btnp(button)
+            for button in [
+            pyxel.GAMEPAD1_BUTTON_A,
+            pyxel.GAMEPAD1_BUTTON_B,
+            pyxel.GAMEPAD1_BUTTON_X,
+            pyxel.GAMEPAD1_BUTTON_Y,
+            ]
+        )
         if self.game_state == "TITLE":
             # Update stars
             for star in self.stars:
                 star.update()
 
-            if pyxel.btnp(pyxel.KEY_SPACE):
+            if pyxel.btnp(pyxel.KEY_SPACE) or pushedShot:
                 self.reset_game()
 
         elif self.game_state == "PLAYING":
@@ -82,7 +92,7 @@ class ShooterGame:
             self.player.move()
 
             # Shooting bullets
-            if pyxel.btnp(pyxel.KEY_SPACE):
+            if pyxel.btnp(pyxel.KEY_SPACE) or pushedShot:
                 self.bullets.append(Bullet(self.player.x + 3, self.player.y))
                 pyxel.play(0, 0)  # Play bullet firing sound
 
@@ -201,7 +211,7 @@ class ShooterGame:
             if self.game_over_timer > 180:
                 self.game_state = "TITLE"
 
-            if pyxel.btnp(pyxel.KEY_R):
+            if pyxel.btnp(pyxel.KEY_R) or pushedStart or pushedShot:
                 self.game_state = "TITLE"
 
     def draw(self):

@@ -15,6 +15,7 @@ class Meteor:
             0.05, 0.1)  # Frequency of the sine wave
         self.base_x = self.x  # Base x position for sine wave movement
         self.time = 0  # Time counter for sine wave calculation
+        self.active = True
 
     def update(self):
         self.y += self.speed
@@ -36,3 +37,11 @@ class Meteor:
     def draw(self):
         # Draw as a gray rectangle
         pyxel.rect(self.x, self.y, self.width, self.height, 11)
+
+    def collides_with(self, obj):
+        return (
+            self.x < obj.x + obj.width and
+            self.x + self.width > obj.x and
+            self.y < obj.y + obj.height and
+            self.y + self.height > obj.y
+        )

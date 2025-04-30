@@ -1,2 +1,13 @@
 <script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
-<pyxel-run root="/copilot-shooter/shooter" gamepad="enabled" name="shooter.py"></pyxel-run>
+<body></body>
+<script>
+  const pyxelRun = document.createElement("pyxel-run")
+  pyxelRun.setAttribute("gamepad", "enabled")
+  pyxelRun.setAttribute("name", "shooter.py")
+
+  const isGitHubPages = window.location.hostname === "your-github-username.github.io"
+  const rootPath = isGitHubPages ? "/copilot-shooter/shooter" : "/shooter"
+  pyxelRun.setAttribute("root", rootPath)
+
+  document.body.appendChild(pyxelRun)
+</script>

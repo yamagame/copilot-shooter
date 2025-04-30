@@ -1,7 +1,7 @@
 import pyxel
 import random
-from enemy_bullet import EnemyBullet
-from fragment import Fragment
+from obj.enemy_bullet import EnemyBullet
+from obj.fragment import Fragment
 
 
 class Enemy:
@@ -14,6 +14,7 @@ class Enemy:
         self.direction = 1  # 1: moving right, -1: moving left
         self.shoot_timer = random.randint(30, 90)  # Random initial timer
         self.fragments = []  # List to store fragments
+        self.active = True
 
     def update(self, bullets, player_x, player_y):
         if self.alive:
@@ -46,6 +47,7 @@ class Enemy:
         self.x = random.randint(0, pyxel.width - self.width)
         self.y = random.randint(0, pyxel.height // 2)
         self.alive = True
+        self.active = True
 
     def draw(self):
         if self.alive:

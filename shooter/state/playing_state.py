@@ -44,8 +44,8 @@ class PlayingState(State):
                   pyxel.play(1, 1)  # Play enemy explosion sound
 
                   # Add a new meteor if the count is less than 100
-                  if len(self.meteors) < 100:
-                      self.meteors.append(Meteor())
+                  if len(self.game.meteors) < 100:
+                      self.game.meteors.append(Meteor())
 
         # Check for collisions between player and meteors
         for meteor in self.game.meteors:

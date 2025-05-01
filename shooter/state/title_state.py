@@ -6,7 +6,7 @@ class TitleState(State):
         for star in self.game.stars:
             star.update()
 
-        if self.game.button.startPushed:
+        if self.game.button.startPushed or self.game.button.shotPushed:
             self.game.reset_game()
             self.game.state = self.game.playing_state
 

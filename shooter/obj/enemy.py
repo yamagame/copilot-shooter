@@ -29,7 +29,7 @@ class Enemy:
                 bullets.append(EnemyBullet(self.x + self.width //
                                2, self.y + self.height, player_x, player_y))
                 # Reset timer with random value
-                self.shoot_timer = random.randint(30, 90)
+                self.shoot_timer = random.randint(10, 50)
 
         # Update fragments
         for fragment in self.fragments:

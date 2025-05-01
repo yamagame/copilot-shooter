@@ -54,7 +54,7 @@ class ShooterGame:
         self.bullets = []
         self.enemy_bullets = []
         self.enemies = [Enemy(20, 20)]
-        self.meteors = [Meteor() for _ in range(5)]
+        self.meteors = [Meteor() for _ in range(2)]
         self.stars = [Star() for _ in range(50)]
         self.fragments = []
         self.score = 0

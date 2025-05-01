@@ -32,6 +32,9 @@ class ExplodingState(State):
         for meteor in self.game.meteors:
             meteor.update()
 
+        # Update power-ups
+        for powerup in self.game.powerups:
+            powerup.update()
 
 
     def draw(self):
@@ -48,5 +51,7 @@ class ExplodingState(State):
             enemy.draw()
         for meteor in self.game.meteors:
             meteor.draw()
+        for powerup in self.game.powerups:
+            powerup.draw()
         pyxel.text(5, 5, f"Score: {self.game.score}", 7)
         pyxel.text(5, 15, f"Best: {self.game.best_score}", 7)

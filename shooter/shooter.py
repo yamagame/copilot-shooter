@@ -25,6 +25,7 @@ class ShooterGame:
         self.game_over_timer = 0
         self.button = Button()
         self.enemies_defeated = 0
+        self.powerups = []  # List to store power-up items
 
         self.setup_sounds()
 
@@ -58,10 +59,12 @@ class ShooterGame:
         self.meteors = [Meteor() for _ in range(2)]
         self.stars = [Star() for _ in range(50)]
         self.fragments = []
+        self.powerups = []
         self.score = 0
         self.game_over_timer = 0
         self.bt_test = False
         self.enemies_defeated = 0
+        self.powerup_timer = 0  # Reset the power-up timer
 
     def create_explosion(self, x, y):
         """Create a large explosion effect at the given position."""

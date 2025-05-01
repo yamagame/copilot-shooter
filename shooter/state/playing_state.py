@@ -2,6 +2,7 @@ import pyxel
 from .state import State
 from obj.bullet import Bullet
 from obj.meteor import Meteor
+from obj.powerup import PowerUp
 
 class PlayingState(State):
     def __init__(self, game):
@@ -37,6 +38,17 @@ class PlayingState(State):
         # Update meteors
         for meteor in self.game.meteors:
             meteor.update()
+
+        # Spawn power-ups every 30 seconds (1800 frames at 60 FPS)
+        self.game.powerup_timer += 1
+        if self.game.powerup_timer >= 180*5:
+            self.game.powerups.append(PowerUp())
+            self.game.powerup_timer = 0
+
+        # Update power-ups
+        for powerup in self.game.powerups:
+            powerup.update()
+        self.game.powerups = [p for p in self.game.powerups if p.active]  # Remove off-screen power-ups
 
         # Check for collisions between bullets and enemies
         for bullet in self.game.bullets:
@@ -110,5 +122,7 @@ class PlayingState(State):
             enemy.draw()
         for meteor in self.game.meteors:
             meteor.draw()
+        for powerup in self.game.powerups:
+            powerup.draw()
         pyxel.text(5, 5, f"Score: {self.game.score}", 7)
         pyxel.text(5, 15, f"Best: {self.game.best_score}", 7)

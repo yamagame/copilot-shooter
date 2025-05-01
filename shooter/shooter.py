@@ -24,6 +24,7 @@ class ShooterGame:
         self.best_score = 0
         self.game_over_timer = 0
         self.button = Button()
+        self.enemies_defeated = 0
 
         self.setup_sounds()
 
@@ -60,6 +61,7 @@ class ShooterGame:
         self.score = 0
         self.game_over_timer = 0
         self.bt_test = False
+        self.enemies_defeated = 0
 
     def create_explosion(self, x, y):
         """Create a large explosion effect at the given position."""

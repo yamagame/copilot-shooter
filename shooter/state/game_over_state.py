@@ -25,7 +25,7 @@ class GameOverState(State):
         pyxel.cls(0)
         for star in self.game.stars:
             star.draw()
-        pyxel.text(70, 60, "GAME OVER", 8)
-        pyxel.text(50, 90, "PRESS R TO RESTART", 7)
+        pyxel.text(80, 60, "GAME OVER", 8)
+        pyxel.text(60, 90, "PRESS R TO RESTART", 7)
         pyxel.text(5, 5, f"Score: {self.game.score}", 7)
         pyxel.text(5, 15, f"Best: {self.game.best_score}", 7)

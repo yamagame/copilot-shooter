@@ -4,6 +4,9 @@ from obj.bullet import Bullet
 from obj.meteor import Meteor
 
 class PlayingState(State):
+    def __init__(self, game):
+        super().__init__(game)
+
     def can_shoot_bullet(self):
         return len(self.game.bullets) < 2
 
@@ -46,8 +49,10 @@ class PlayingState(State):
                   enemy.respawn()
                   pyxel.play(1, 1)  # Play enemy explosion sound
 
-                  # Add a new meteor if the count is less than 100
-                  if len(self.game.meteors) < 100:
+                  self.game.enemies_defeated += 1  # Increment defeated enemies count
+
+                  # Add a new meteor for every 3 enemies defeated
+                  if self.game.enemies_defeated % 3 == 0:
                       self.game.meteors.append(Meteor())
 
         # Check for collisions between player and meteors

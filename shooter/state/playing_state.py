@@ -4,6 +4,9 @@ from obj.bullet import Bullet
 from obj.meteor import Meteor
 
 class PlayingState(State):
+    def can_shoot_bullet(self):
+        return len(self.game.bullets) < 2
+
     def update(self):
         # Update stars
         for star in self.game.stars:
@@ -11,9 +14,9 @@ class PlayingState(State):
 
         self.game.player.move()
 
-        if self.game.button.shotPushed:
+        if self.game.button.shotPushed and self.can_shoot_bullet():
             self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
-            pyxel.play(0, 0)
+            pyxel.play(0, 0)  # Play bullet firing sound
 
         # Update bullets
         for bullet in self.game.bullets:

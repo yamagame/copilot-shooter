@@ -16,3 +16,11 @@ class Player:
 
     def draw(self):
         pyxel.rect(self.x, self.y, self.width, self.height, 9)
+
+    def collides_with(self, obj):
+        return (
+            self.x < obj.x + obj.width and
+            self.x + self.width > obj.x and
+            self.y < obj.y + obj.height and
+            self.y + self.height > obj.y
+        )

@@ -9,7 +9,11 @@ class PlayingState(State):
         super().__init__(game)
 
     def can_shoot_bullet(self):
-        return len(self.game.bullets) < 2
+        return len(self.game.bullets) < self.game.bullet_limit
+
+    def start(self):
+        self.shot_cooldown = 0  # Cooldown timer for continuous shooting
+        return self
 
     def update(self):
         # Update stars
@@ -18,9 +22,14 @@ class PlayingState(State):
 
         self.game.player.move()
 
-        if self.game.button.shotPushed and self.can_shoot_bullet():
-            self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
-            pyxel.play(0, 0)  # Play bullet firing sound
+        # Handle continuous shooting
+        if (self.game.button.shotPressed and self.shot_cooldown == 0) or self.game.button.shotPushed:
+            if self.can_shoot_bullet():
+                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
+                pyxel.play(0, 0)  # Play bullet firing sound
+                self.shot_cooldown = 6  # Set cooldown to 6 frames
+        if self.shot_cooldown > 0:
+            self.shot_cooldown -= 1
 
         # Update bullets
         for bullet in self.game.bullets:
@@ -100,6 +109,16 @@ class PlayingState(State):
                     self.game.player.x + self.game.player.width // 2, self.game.player.y + self.game.player.height // 2
                 )
                 self.game.state = self.game.exploding_state
+
+        # Check for collisions between player and power-ups
+        for powerup in self.game.powerups:
+            if self.game.player.collides_with(powerup):
+                self.game.increase_bullet_limit()  # Increase bullet limit
+                powerup.active = False  # Deactivate the power-up
+                pyxel.play(3, 3)  # Play power-up sound
+
+        # Remove inactive power-ups
+        self.game.powerups = [p for p in self.game.powerups if p.active]
 
         # Remove inactive enemies and meteors
         self.game.enemies = [e for e in self.game.enemies if e.active]

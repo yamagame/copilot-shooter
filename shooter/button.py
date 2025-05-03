@@ -7,6 +7,7 @@ class Button:
             pyxel.GAMEPAD1_BUTTON_START
         ]
         self.shot_buttons = [
+            pyxel.KEY_SPACE,
             pyxel.GAMEPAD1_BUTTON_A,
             pyxel.GAMEPAD1_BUTTON_B,
             pyxel.GAMEPAD1_BUTTON_X,
@@ -14,6 +15,7 @@ class Button:
         ]
         self.startPushed = False
         self.shotPushed = False
+        self.shotPressed = False
 
     def is_start_pressed(self):
         return any(pyxel.btnp(button) for button in self.start_buttons)
@@ -24,3 +26,4 @@ class Button:
     def update(self):
         self.startPushed = self.is_start_pressed()
         self.shotPushed = self.is_start_pressed() or self.is_shot_pressed()
+        self.shotPressed = any(pyxel.btn(button) for button in self.shot_buttons)

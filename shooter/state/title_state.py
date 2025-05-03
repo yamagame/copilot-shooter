@@ -8,7 +8,7 @@ class TitleState(State):
 
         if self.game.button.startPushed or self.game.button.shotPushed:
             self.game.reset_game()
-            self.game.state = self.game.playing_state
+            self.game.state = self.game.playing_state.start()
 
     def draw(self):
         pyxel.cls(0)

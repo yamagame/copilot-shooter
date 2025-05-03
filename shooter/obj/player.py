@@ -3,8 +3,8 @@ import pyxel
 
 class Player:
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = 76  # Adjusted for new resolution
+        self.y = 200  # Adjusted for new resolution
         self.width = 8
         self.height = 8
 

@@ -13,8 +13,8 @@ class EnemyBullet:
         dx = target_x - x
         dy = target_y - y
         magnitude = (dx**2 + dy**2) ** 0.5
-        self.vx = (dx / magnitude) * 2  # Speed in x direction
-        self.vy = (dy / magnitude) * 2  # Speed in y direction
+        self.vx = (dx / magnitude) * 4  # Speed in x direction
+        self.vy = (dy / magnitude) * 4  # Speed in y direction
 
     def update(self):
         if self.active:

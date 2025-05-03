@@ -13,6 +13,7 @@ class GameOverState(State):
         if pyxel.btnp(pyxel.KEY_R) or any(
             pyxel.btnp(button)
             for button in [
+                pyxel.KEY_SPACE,
                 pyxel.GAMEPAD1_BUTTON_A,
                 pyxel.GAMEPAD1_BUTTON_B,
                 pyxel.GAMEPAD1_BUTTON_X,
@@ -29,7 +30,7 @@ class GameOverState(State):
         pyxel.cls(0)
         for star in self.game.stars:
             star.draw()
-        pyxel.text(80, 60, "GAME OVER", 8)
-        pyxel.text(60, 90, "PRESS R TO RESTART", 7)
+        pyxel.text(65, 80, "GAME OVER", 8)  # Adjusted for new resolution
+        pyxel.text(45, 120, "PRESS R TO RESTART", 7)  # Adjusted for new resolution
         pyxel.text(5, 5, f"Score: {self.game.score}", 7)
         pyxel.text(5, 15, f"Best: {self.game.best_score}", 7)

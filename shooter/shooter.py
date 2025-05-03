@@ -30,7 +30,7 @@ class ShooterGame:
         self.bullet_limit = 2
 
     def __init__(self):
-        pyxel.init(200, 150, title="Copilot-Shooter")
+        pyxel.init(160, 230, title="Copilot-Shooter")
         self.button = Button()
         self.setup_sounds()
         self.initialize_game_objects()

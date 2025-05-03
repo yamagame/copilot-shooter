@@ -12,13 +12,24 @@ class PlayingState(State):
         return len(self.game.bullets) < self.game.bullet_limit
 
     def start(self):
-        self.shot_cooldown = 0  # Cooldown timer for continuous shooting
+        self.shot_cooldown = 10  # Cooldown timer for continuous shooting
+        self.mouse_shot_cooldown = 10  # Cooldown timer for mouse-based shooting
         return self
 
     def update(self):
         # Update stars
         for star in self.game.stars:
             star.update()
+
+        # Update player position based on mouse movement (horizontal movement only)
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            self.mouse_start_x, _ = self.game.button.get_mouse_position()
+
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
+            current_mouse_x, _ = self.game.button.get_mouse_position()
+            delta_x = current_mouse_x - self.mouse_start_x
+            self.game.player.x += delta_x
+            self.mouse_start_x = current_mouse_x  # Update start position for next frame
 
         self.game.player.move()
 
@@ -30,6 +41,15 @@ class PlayingState(State):
                 self.shot_cooldown = 6  # Set cooldown to 6 frames
         if self.shot_cooldown > 0:
             self.shot_cooldown -= 1
+
+        # Handle mouse-based shooting
+        if self.game.button.is_mouse_left_pressed():
+            if self.mouse_shot_cooldown == 0 and self.can_shoot_bullet():
+                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
+                pyxel.play(0, 0)  # Play bullet firing sound
+                self.mouse_shot_cooldown = 6  # Set cooldown to 6 frames
+        if self.mouse_shot_cooldown > 0:
+            self.mouse_shot_cooldown -= 1
 
         # Update bullets
         for bullet in self.game.bullets:

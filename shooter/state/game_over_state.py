@@ -21,6 +21,10 @@ class GameOverState(State):
         ):
             self.game.state = self.game.title_state
 
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            self.game.state = self.game.title_state
+            self.game.reset_game()
+
     def draw(self):
         pyxel.cls(0)
         for star in self.game.stars:

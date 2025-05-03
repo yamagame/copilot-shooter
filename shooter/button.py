@@ -4,7 +4,8 @@ class Button:
     def __init__(self):
         self.start_buttons = [
             pyxel.KEY_SPACE,
-            pyxel.GAMEPAD1_BUTTON_START
+            pyxel.GAMEPAD1_BUTTON_START,
+            pyxel.MOUSE_BUTTON_LEFT
         ]
         self.shot_buttons = [
             pyxel.KEY_SPACE,
@@ -27,3 +28,9 @@ class Button:
         self.startPushed = self.is_start_pressed()
         self.shotPushed = self.is_start_pressed() or self.is_shot_pressed()
         self.shotPressed = any(pyxel.btn(button) for button in self.shot_buttons)
+
+    def is_mouse_left_pressed(self):
+        return pyxel.btn(pyxel.MOUSE_BUTTON_LEFT)
+
+    def get_mouse_position(self):
+        return pyxel.mouse_x, pyxel.mouse_y

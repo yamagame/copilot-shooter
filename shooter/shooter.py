@@ -1,5 +1,5 @@
 import pyxel
-from obj.player import Player
+from .obj.player import Player
 from obj.enemy import Enemy
 from obj.meteor import Meteor
 from obj.star import Star

@@ -19,7 +19,10 @@ class Fragment:
         self.vx *= 0.95  # Gradually reduce horizontal speed
         self.vy *= 0.95  # Gradually reduce vertical speed
         self.lifetime -= 1
+        self.color = random.choice([8, 9, 10, 11])  # Random color
 
     def draw(self):
         if self.lifetime > 0:
-            pyxel.pset(self.x, self.y, self.color)  # Draw as a single pixel
+            # Make the fragment blink by alternating visibility based on lifetime
+            if self.lifetime % 4 < 2:  # Visible for 2 frames, invisible for 2 frames
+                pyxel.pset(self.x, self.y, self.color)  # Draw as a single pixel

@@ -72,7 +72,7 @@ class ShooterGame:
 
     def create_explosion(self, x, y):
         """Create a large explosion effect at the given position."""
-        for _ in range(50):
+        for _ in range(500):
             self.fragments.append(Fragment(x, y))
         pyxel.play(1, 1)  # Play explosion sound
 

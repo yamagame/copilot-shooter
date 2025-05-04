@@ -99,4 +99,4 @@ class FragmentMeteor(Meteor):
 
     def draw(self):
         # Draw as a gray rectangle
-        pyxel.rect(self.x, self.y, self.width, self.height, 12)
+        pyxel.rect(self.x, self.y, self.width, self.height, 8)

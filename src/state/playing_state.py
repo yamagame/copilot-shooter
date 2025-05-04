@@ -1,6 +1,5 @@
 import pyxel
 from .state import State
-from obj.bullet import Bullet
 from obj.enemy import Enemy
 from obj.meteor import Meteor, GiantMeteor
 from obj.powerup import PowerUp
@@ -10,21 +9,14 @@ class PlayingState(State):
     def __init__(self, game):
         super().__init__(game)
 
-    def can_shoot_bullet(self):
-        return len(self.game.bullets) < self.game.bullet_limit
-
-    def start(self):
-        self.shot_cooldown = 10  # Cooldown timer for continuous shooting
-        self.mouse_shot_cooldown = 10  # Cooldown timer for mouse-based shooting
-        return self
-
     def update(self):
+        # Update player position
+        self.handle_mouse_movement(self.game.button)
+        self.game.player.move()
+
         # Update stars
         for star in self.game.stars:
             star.update()
-
-        # Player movement processing
-        self.handle_player_movement_and_shooting()
 
         # Update bullets
         for bullet in self.game.bullets:
@@ -80,38 +72,6 @@ class PlayingState(State):
         # Update the best score during gameplay
         if self.game.score > self.game.best_score:
             self.game.best_score = self.game.score
-    
-    # Player movement processing
-    def handle_player_movement_and_shooting(self):
-        # Update player position based on mouse movement (horizontal movement only)
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            self.mouse_start_x, _ = self.game.button.get_mouse_position()
-
-        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
-            current_mouse_x, _ = self.game.button.get_mouse_position()
-            delta_x = current_mouse_x - self.mouse_start_x
-            self.game.player.x += delta_x
-            self.mouse_start_x = current_mouse_x  # Update start position for next frame
-
-        self.game.player.move()
-
-        # Handle continuous shooting
-        if (self.game.button.shotPressed and self.shot_cooldown == 0) or self.game.button.shotPushed:
-            if self.can_shoot_bullet():
-                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
-                pyxel.play(0, 0)  # Play bullet firing sound
-                self.shot_cooldown = 6  # Set cooldown to 6 frames
-        if self.shot_cooldown > 0:
-            self.shot_cooldown -= 1
-
-        # Handle mouse-based shooting
-        if self.game.button.is_mouse_left_pressed():
-            if self.mouse_shot_cooldown == 0 and self.can_shoot_bullet():
-                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
-                pyxel.play(0, 0)  # Play bullet firing sound
-                self.mouse_shot_cooldown = 6  # Set cooldown to 6 frames
-        if self.mouse_shot_cooldown > 0:
-            self.mouse_shot_cooldown -= 1
 
     # Collision detection
     def handle_collisions(self):
@@ -201,5 +161,4 @@ class PlayingState(State):
             meteor.draw()
         for powerup in self.game.powerups:
             powerup.draw()
-        pyxel.text(5, 5, f"Score: {self.game.score}", 7)
-        pyxel.text(5, 15, f"Best: {self.game.best_score}", 7)
+        self.draw_score_and_best()

@@ -94,6 +94,21 @@ class PlayingState(State):
             powerup.update()
         self.game.powerups = [p for p in self.game.powerups if p.active]  # Remove off-screen power-ups
 
+        # Collision detection
+        self.hitcheck()
+
+        # Remove inactive power-ups
+        self.game.powerups = [p for p in self.game.powerups if p.active]
+
+        # Remove inactive enemies and meteors
+        self.game.enemies = [e for e in self.game.enemies if e.active]
+        self.game.meteors = [m for m in self.game.meteors if m.active]
+
+        # Update the best score during gameplay
+        if self.game.score > self.game.best_score:
+            self.game.best_score = self.game.score
+    
+    def hitcheck(self):
         # Check for collisions between bullets and enemies
         for bullet in self.game.bullets:
             for enemy in self.game.enemies:
@@ -120,10 +135,7 @@ class PlayingState(State):
         # Check collisions between bullets and meteors
         for meteor in self.game.meteors:
             for bullet in self.game.bullets:
-                if (
-                    meteor.x < bullet.x < meteor.x + meteor.width
-                    and meteor.y < bullet.y < meteor.y + meteor.height
-                ):
+                if (bullet.collides_with(meteor)):
                     bullet.active = False  # Deactivate the bullet
                     self.game.score += 10
                     pyxel.play(2, 2)  # Play a "ping" sound when bullet hits meteor
@@ -165,17 +177,6 @@ class PlayingState(State):
                 self.game.increase_bullet_limit()  # Increase bullet limit
                 powerup.active = False  # Deactivate the power-up
                 pyxel.play(3, 3)  # Play power-up sound
-
-        # Remove inactive power-ups
-        self.game.powerups = [p for p in self.game.powerups if p.active]
-
-        # Remove inactive enemies and meteors
-        self.game.enemies = [e for e in self.game.enemies if e.active]
-        self.game.meteors = [m for m in self.game.meteors if m.active]
-
-        # Update the best score during gameplay
-        if self.game.score > self.game.best_score:
-            self.game.best_score = self.game.score
 
     def draw(self):
         pyxel.cls(0)

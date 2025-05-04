@@ -1,7 +1,7 @@
 import pyxel
 from .state import State
 from obj.enemy import Enemy
-from obj.meteor import Meteor, GiantMeteor
+from obj.meteor import Meteor, GiantMeteor, FragmentMeteor
 from obj.powerup import PowerUp
 import random
 
@@ -52,7 +52,7 @@ class PlayingState(State):
 
         # Spawn a giant meteor occasionally
         if pyxel.frame_count % 600 == 0:  # Every 10 seconds at 60 FPS
-            self.game.meteors.append(GiantMeteor(random.randint(0, pyxel.width - 16), -16))
+            self.game.meteors.append(GiantMeteor(random.randint(0, pyxel.width - 20), -20))
 
         # Update power-ups
         for powerup in self.game.powerups:
@@ -106,6 +106,17 @@ class PlayingState(State):
                     self.game.score += 10
                     pyxel.play(2, 2)  # Play a "ping" sound when bullet hits meteor
 
+        # Check for collisions between bullets and FragmentMeteors
+        for meteor in self.game.meteors:
+            if isinstance(meteor, FragmentMeteor):
+                for bullet in self.game.bullets:
+                    if meteor.collides_with(bullet):
+                        meteor.active = False
+                        bullet.active = False
+                        self.game.score += 30
+                        self.game.fragments.extend(meteor.explode())
+                        pyxel.play(1, 1)  # Play enemy explosion sound
+
         # Check for collisions between bullets and giant meteors
         for meteor in self.game.meteors:
             if isinstance(meteor, GiantMeteor):
@@ -117,7 +128,7 @@ class PlayingState(State):
                             self.game.meteors.extend(meteor.split())  # Add smaller meteors
                             self.game.fragments.extend(meteor.explode())
                             meteor.active = False
-                            self.game.score += 100  # Add 100 points for destroying a GiantMeteor
+                            self.game.score += 200  # Add 100 points for destroying a GiantMeteor
                             pyxel.play(1, 4)  # Play giant meteor explosion sound
 
         # Check collisions between enemy bullets and player

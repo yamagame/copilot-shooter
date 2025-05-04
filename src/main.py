@@ -42,6 +42,8 @@ class ShooterGame:
         self.setup_sounds()
         self.initialize_game_objects()
         self.initialize_game_state()
+        self.shot_cooldown = 0  # Cooldown timer for continuous shooting
+        self.mouse_shot_cooldown = 0  # Cooldown timer for mouse-based shooting
 
         self.title_state = TitleState(self)
         self.playing_state = PlayingState(self)

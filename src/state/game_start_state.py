@@ -9,7 +9,7 @@ class GameStartState(State):
 
     def start(self):
         self.timer = 60  # Countdown timer for the start state
-        super(GameStartState, self).start()
+        self.reset_cooldown()
         return self
 
     def update(self):

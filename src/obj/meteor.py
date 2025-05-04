@@ -97,6 +97,24 @@ class FragmentMeteor(Meteor):
     def reset(self):
         self.active = False  # Deactivate if it goes off the screen
 
+    def collides_with(self, obj):
+        return (
+            self.x < obj.x + obj.width and
+            self.x + self.width > obj.x and
+            self.y < obj.y + obj.height and
+            self.y + self.height > obj.y
+        )
+
+    def explode(self):
+        """Create fragments when the GiantMeteor is destroyed."""
+        fragments = []
+        for _ in range(100):  # Create 100 fragments
+            fragments.append(Fragment(self.x + self.width // 2, self.y + self.height // 2))
+        return fragments
+
+    def update(self):
+        super().update()
+
     def draw(self):
         # Draw as a gray rectangle
         pyxel.rect(self.x, self.y, self.width, self.height, 8)

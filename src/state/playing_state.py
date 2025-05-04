@@ -23,35 +23,8 @@ class PlayingState(State):
         for star in self.game.stars:
             star.update()
 
-        # Update player position based on mouse movement (horizontal movement only)
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
-            self.mouse_start_x, _ = self.game.button.get_mouse_position()
-
-        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
-            current_mouse_x, _ = self.game.button.get_mouse_position()
-            delta_x = current_mouse_x - self.mouse_start_x
-            self.game.player.x += delta_x
-            self.mouse_start_x = current_mouse_x  # Update start position for next frame
-
-        self.game.player.move()
-
-        # Handle continuous shooting
-        if (self.game.button.shotPressed and self.shot_cooldown == 0) or self.game.button.shotPushed:
-            if self.can_shoot_bullet():
-                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
-                pyxel.play(0, 0)  # Play bullet firing sound
-                self.shot_cooldown = 6  # Set cooldown to 6 frames
-        if self.shot_cooldown > 0:
-            self.shot_cooldown -= 1
-
-        # Handle mouse-based shooting
-        if self.game.button.is_mouse_left_pressed():
-            if self.mouse_shot_cooldown == 0 and self.can_shoot_bullet():
-                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
-                pyxel.play(0, 0)  # Play bullet firing sound
-                self.mouse_shot_cooldown = 6  # Set cooldown to 6 frames
-        if self.mouse_shot_cooldown > 0:
-            self.mouse_shot_cooldown -= 1
+        # Player movement processing
+        self.handle_player_movement_and_shooting()
 
         # Update bullets
         for bullet in self.game.bullets:
@@ -95,7 +68,7 @@ class PlayingState(State):
         self.game.powerups = [p for p in self.game.powerups if p.active]  # Remove off-screen power-ups
 
         # Collision detection
-        self.hitcheck()
+        self.handle_collisions()
 
         # Remove inactive power-ups
         self.game.powerups = [p for p in self.game.powerups if p.active]
@@ -108,34 +81,67 @@ class PlayingState(State):
         if self.game.score > self.game.best_score:
             self.game.best_score = self.game.score
     
-    def hitcheck(self):
+    # Player movement processing
+    def handle_player_movement_and_shooting(self):
+        # Update player position based on mouse movement (horizontal movement only)
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            self.mouse_start_x, _ = self.game.button.get_mouse_position()
+
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
+            current_mouse_x, _ = self.game.button.get_mouse_position()
+            delta_x = current_mouse_x - self.mouse_start_x
+            self.game.player.x += delta_x
+            self.mouse_start_x = current_mouse_x  # Update start position for next frame
+
+        self.game.player.move()
+
+        # Handle continuous shooting
+        if (self.game.button.shotPressed and self.shot_cooldown == 0) or self.game.button.shotPushed:
+            if self.can_shoot_bullet():
+                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
+                pyxel.play(0, 0)  # Play bullet firing sound
+                self.shot_cooldown = 6  # Set cooldown to 6 frames
+        if self.shot_cooldown > 0:
+            self.shot_cooldown -= 1
+
+        # Handle mouse-based shooting
+        if self.game.button.is_mouse_left_pressed():
+            if self.mouse_shot_cooldown == 0 and self.can_shoot_bullet():
+                self.game.bullets.append(Bullet(self.game.player.x + 3, self.game.player.y))
+                pyxel.play(0, 0)  # Play bullet firing sound
+                self.mouse_shot_cooldown = 6  # Set cooldown to 6 frames
+        if self.mouse_shot_cooldown > 0:
+            self.mouse_shot_cooldown -= 1
+
+    # Collision detection
+    def handle_collisions(self):
         # Check for collisions between bullets and enemies
         for bullet in self.game.bullets:
             for enemy in self.game.enemies:
-              if enemy.collides_with(bullet):
-                  bullet.active = False
-                  enemy.active = False
-                  self.game.score += 100
-                  self.game.fragments.extend(enemy.explode())  # Trigger explosion
-                  enemy.respawn()
-                  pyxel.play(1, 1)  # Play enemy explosion sound
+                if enemy.collides_with(bullet):
+                    bullet.active = False
+                    enemy.active = False
+                    self.game.score += 100
+                    self.game.fragments.extend(enemy.explode())  # Trigger explosion
+                    enemy.respawn()
+                    pyxel.play(1, 1)  # Play enemy explosion sound
 
-                  self.game.enemies_defeated += 1  # Increment defeated enemies count
+                    self.game.enemies_defeated += 1  # Increment defeated enemies count
 
-                  # Add a new meteor for every 3 enemies defeated
-                  if self.game.enemies_defeated % 3 == 0:
-                      self.game.meteors.append(Meteor())
+                    # Add a new meteor for every 3 enemies defeated
+                    if self.game.enemies_defeated % 3 == 0:
+                        self.game.meteors.append(Meteor())
 
         # Check for collisions between player and meteors
         for meteor in self.game.meteors:
             if meteor.collides_with(self.game.player):
-              self.game.player.active = False
-              self.game.game_over = True
+                self.game.player.active = False
+                self.game.game_over = True
 
         # Check collisions between bullets and meteors
         for meteor in self.game.meteors:
             for bullet in self.game.bullets:
-                if (bullet.collides_with(meteor)):
+                if bullet.collides_with(meteor):
                     bullet.active = False  # Deactivate the bullet
                     self.game.score += 10
                     pyxel.play(2, 2)  # Play a "ping" sound when bullet hits meteor

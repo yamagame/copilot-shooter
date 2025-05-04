@@ -53,18 +53,11 @@ class ShooterGame:
 
     def setup_sounds(self):
         """Define sound effects for the game."""
-        pyxel.sounds[0].set(
-            "c3e3g3c4", "p", "7", "n", 10
-        )
-        pyxel.sounds[1].set(
-            "f3e3d3c3", "p", "7", "n", 10
-        )
-        pyxel.sounds[2].set(
-            "f3e3d3", "p", "7", "n", 10
-        )
-        pyxel.sounds[3].set(
-            "g3c4e4g4", "p", "7", "n", 10
-        )
+        pyxel.sounds[0].set("a3a2c1a1", "p", "7", "s", 5)   # bullet
+        pyxel.sounds[1].set("a3a2c2c2", "n", "7742", "s", 5) # bang
+        pyxel.sounds[2].set("f3f4 ", "p", "7", "n", 5) # ping
+        pyxel.sounds[3].set("g3c4e4g4", "p", "7", "n", 10) # powerup
+        pyxel.sounds[4].set("a3a2c2c2", "n", "7742", "s", 15) # bigbang
 
     def reset_game(self):
         self.initialize_game_objects()
@@ -74,7 +67,7 @@ class ShooterGame:
         """Create a large explosion effect at the given position."""
         for _ in range(500):
             self.fragments.append(Fragment(x, y))
-        pyxel.play(1, 1)  # Play explosion sound
+        pyxel.play(1, 4)  # Play plyer explosion sound
 
     def increase_bullet_limit(self):
         self.bullet_limit += 1

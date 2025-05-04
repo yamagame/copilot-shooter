@@ -135,6 +135,7 @@ class PlayingState(State):
                             self.game.fragments.extend(meteor.explode())
                             meteor.active = False
                             self.game.score += 100  # Add 100 points for destroying a GiantMeteor
+                            pyxel.play(1, 4)  # Play giant meteor explosion sound
 
         # Check collisions between enemy bullets and player
         for bullet in self.game.enemy_bullets:

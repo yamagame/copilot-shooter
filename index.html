@@ -3,11 +3,11 @@
 <script>
   const pyxelRun = document.createElement("pyxel-run")
   pyxelRun.setAttribute("gamepad", "enabled")
-  pyxelRun.setAttribute("name", "shooter.py")
+  pyxelRun.setAttribute("name", "main.py")
   pyxelRun.setAttribute("packages", "")
 
   const isGitHubPages = window.location.hostname === "yamagame.github.io"
-  const rootPath = isGitHubPages ? "/copilot-shooter/shooter" : "/shooter"
+  const rootPath = isGitHubPages ? "/copilot-shooter/" : "."
   pyxelRun.setAttribute("root", rootPath)
 
   document.body.appendChild(pyxelRun)

@@ -2,7 +2,7 @@
 
 GitHub Copilot と Pyxel で作成したサンプルシューティングゲームです。
 
-デモ : [copilot-shooter](https://kitao.github.io/pyxel/wasm/launcher/?play=yamagame.copilot-shooter.out.copilot-shooter&gamepad=enabled)
+デモ : [copilot-shooter](https://yamagame.github.io/copilot-shooter/)
 
 以下、作成に使用したChat。モデルは ChatGPT 4o。
 多少手直ししてるものの、ほぼコピペで作成

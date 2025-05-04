@@ -1,8 +1,9 @@
 import pyxel
 from .state import State
 from obj.bullet import Bullet
-from obj.meteor import Meteor
+from obj.meteor import Meteor, GiantMeteor, FragmentMeteor
 from obj.powerup import PowerUp
+import random
 
 class PlayingState(State):
     def __init__(self, game):
@@ -68,11 +69,20 @@ class PlayingState(State):
         for meteor in self.game.meteors:
             meteor.update()
 
+        # Update fragments
+        for fragment in self.game.fragments:
+            fragment.update()
+        self.game.fragments = [f for f in self.game.fragments if f.lifetime >= 0]
+
         # Spawn power-ups every 30 seconds (1800 frames at 60 FPS)
         self.game.powerup_timer += 1
         if self.game.powerup_timer >= 180*5:
             self.game.powerups.append(PowerUp())
             self.game.powerup_timer = 0
+
+        # Spawn a giant meteor occasionally
+        if pyxel.frame_count % 600 == 0:  # Every 10 seconds at 60 FPS
+            self.game.meteors.append(GiantMeteor(random.randint(0, pyxel.width - 16), -16))
 
         # Update power-ups
         for powerup in self.game.powerups:
@@ -112,6 +122,19 @@ class PlayingState(State):
                     bullet.active = False  # Deactivate the bullet
                     self.game.score += 10
                     pyxel.play(2, 2)  # Play a "ping" sound when bullet hits meteor
+
+        # Check for collisions between bullets and giant meteors
+        for meteor in self.game.meteors:
+            if isinstance(meteor, GiantMeteor):
+                for bullet in self.game.bullets:
+                    if bullet.collides_with(meteor):
+                        bullet.active = False
+                        meteor.health -= 1
+                        if meteor.health <= 0:
+                            self.game.meteors.extend(meteor.split())  # Add smaller meteors
+                            self.game.fragments.extend(meteor.explode())
+                            meteor.active = False
+                            self.game.score += 100  # Add 100 points for destroying a GiantMeteor
 
         # Check collisions between enemy bullets and player
         for bullet in self.game.enemy_bullets:
@@ -153,6 +176,8 @@ class PlayingState(State):
         for star in self.game.stars:
             star.draw()
         self.game.player.draw()
+        for fragment in self.game.fragments:
+            fragment.draw()
         for bullet in self.game.bullets:
             bullet.draw()
         for bullet in self.game.enemy_bullets:

@@ -14,6 +14,7 @@ from state.title_state import TitleState
 from state.playing_state import PlayingState
 from state.exploding_state import ExplodingState
 from state.game_over_state import GameOverState
+from state.game_start_state import GameStartState
 from button import Button
 
 class ShooterGame:
@@ -46,7 +47,7 @@ class ShooterGame:
         self.playing_state = PlayingState(self)
         self.exploding_state = ExplodingState(self)
         self.game_over_state = GameOverState(self)
-
+        self.game_start_state = GameStartState(self)
         self.state = self.title_state
 
         pyxel.run(self.update, self.draw)

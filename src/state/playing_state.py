@@ -1,7 +1,8 @@
 import pyxel
 from .state import State
 from obj.bullet import Bullet
-from obj.meteor import Meteor, GiantMeteor, FragmentMeteor
+from obj.enemy import Enemy
+from obj.meteor import Meteor, GiantMeteor
 from obj.powerup import PowerUp
 import random
 
@@ -64,6 +65,10 @@ class PlayingState(State):
         # Update enemies
         for enemy in self.game.enemies:
             enemy.update(self.game.enemy_bullets, self.game.player.x, self.game.player.y)
+
+        # Increase enemy count every 1000 points
+        if self.game.score // 1000 > len(self.game.enemies) - 1:
+            self.game.enemies.append(Enemy(random.randint(0, pyxel.width - 8), random.randint(0, pyxel.height // 2)))
 
         # Update meteors
         for meteor in self.game.meteors:

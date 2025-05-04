@@ -15,11 +15,16 @@ class Enemy:
         self.shoot_timer = random.randint(30, 90)  # Random initial timer
         self.active = True
         self.respawn_timer = 0  # Timer for respawn delay
+        self.blink_timer = 60  # Set blink duration to 60 frames
 
     def update(self, bullets, player_x, player_y):
         if self.respawn_timer > 0:
             self.respawn_timer -= 1
             return  # Skip update if in respawn delay
+
+        if self.blink_timer > 0:
+            self.blink_timer -= 1
+            return  # Skip movement during blinking
 
         if self.alive:
             self.x += self.direction * 2
@@ -45,6 +50,7 @@ class Enemy:
 
     def respawn(self):
         self.respawn_timer = 300  # Set respawn delay to 300 frames
+        self.blink_timer = 60  # Reset blink timer
         # Respawn at a random position
         self.x = random.randint(0, pyxel.width - self.width)
         self.y = random.randint(0, pyxel.height // 2)
@@ -54,6 +60,10 @@ class Enemy:
     def draw(self):
         if self.respawn_timer > 0:
             return  # Do not draw if in respawn delay
+        if self.blink_timer > 0:
+            if self.blink_timer % 4 < 2:  # Blink effect
+                pyxel.rect(self.x, self.y, self.width, self.height, 8)
+            return
         if self.alive:
             pyxel.rect(self.x, self.y, self.width, self.height, 8)
 

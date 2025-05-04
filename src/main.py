@@ -53,16 +53,16 @@ class ShooterGame:
 
     def setup_sounds(self):
         """Define sound effects for the game."""
-        pyxel.sound(0).set(
+        pyxel.sounds[0].set(
             "c3e3g3c4", "p", "7", "n", 10
         )
-        pyxel.sound(1).set(
+        pyxel.sounds[1].set(
             "f3e3d3c3", "p", "7", "n", 10
         )
-        pyxel.sound(2).set(
+        pyxel.sounds[2].set(
             "f3e3d3", "p", "7", "n", 10
         )
-        pyxel.sound(3).set(
+        pyxel.sounds[3].set(
             "g3c4e4g4", "p", "7", "n", 10
         )
 

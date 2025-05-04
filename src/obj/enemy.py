@@ -13,10 +13,14 @@ class Enemy:
         self.alive = True
         self.direction = 1  # 1: moving right, -1: moving left
         self.shoot_timer = random.randint(30, 90)  # Random initial timer
-        self.fragments = []  # List to store fragments
         self.active = True
+        self.respawn_timer = 0  # Timer for respawn delay
 
     def update(self, bullets, player_x, player_y):
+        if self.respawn_timer > 0:
+            self.respawn_timer -= 1
+            return  # Skip update if in respawn delay
+
         if self.alive:
             self.x += self.direction * 2
             # Reverse direction if hitting screen edges
@@ -31,18 +35,16 @@ class Enemy:
                 # Reset timer with random value
                 self.shoot_timer = random.randint(10, 50)
 
-        # Update fragments
-        for fragment in self.fragments:
-            fragment.update()
-        self.fragments = [f for f in self.fragments if f.lifetime > 0]
-
     def explode(self):
         """Generate fragments when the enemy is hit."""
+        fragments = []
         for _ in range(100):  # Create 100 fragments
-            self.fragments.append(
+            fragments.append(
                 Fragment(self.x + self.width // 2, self.y + self.height // 2))
+        return fragments
 
     def respawn(self):
+        self.respawn_timer = 300  # Set respawn delay to 300 frames
         # Respawn at a random position
         self.x = random.randint(0, pyxel.width - self.width)
         self.y = random.randint(0, pyxel.height // 2)
@@ -50,8 +52,17 @@ class Enemy:
         self.active = True
 
     def draw(self):
+        if self.respawn_timer > 0:
+            return  # Do not draw if in respawn delay
         if self.alive:
             pyxel.rect(self.x, self.y, self.width, self.height, 8)
-        # Draw fragments
-        for fragment in self.fragments:
-            fragment.draw()
+
+    def collides_with(self, obj):
+        if self.respawn_timer > 0:
+            return False  # No collision if in respawn delay
+        return (
+            self.x < obj.x + obj.width
+            and self.x + self.width > obj.x
+            and self.y < obj.y + obj.height
+            and self.y + self.height > obj.y
+        )

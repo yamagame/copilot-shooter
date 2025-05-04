@@ -92,11 +92,11 @@ class PlayingState(State):
         # Check for collisions between bullets and enemies
         for bullet in self.game.bullets:
             for enemy in self.game.enemies:
-              if bullet.collides_with(enemy):
+              if enemy.collides_with(bullet):
                   bullet.active = False
                   enemy.active = False
                   self.game.score += 100
-                  enemy.explode()  # Trigger explosion
+                  self.game.fragments.extend(enemy.explode())  # Trigger explosion
                   enemy.respawn()
                   pyxel.play(1, 1)  # Play enemy explosion sound
 

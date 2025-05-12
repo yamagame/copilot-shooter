@@ -17,6 +17,7 @@ class Button:
         self.startPushed = False
         self.shotPushed = False
         self.shotPressed = False
+        self.mousePressed = False
 
     def is_start_pressed(self):
         return any(pyxel.btnp(button) for button in self.start_buttons)
@@ -31,6 +32,7 @@ class Button:
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             self.mouse_start_x, _ = self.get_mouse_position()
             self.shotPushed = True
+        self.mousePressed = pyxel.btn(pyxel.MOUSE_BUTTON_LEFT)
         if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
             self.shotPressed = True
 

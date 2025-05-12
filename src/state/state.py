@@ -22,7 +22,7 @@ class State:
 
     # Update player position based on mouse movement (horizontal movement only)
     def handle_mouse_movement(self, button):
-        if button.shotPressed:
+        if button.mousePressed:
             current_mouse_x, _ = button.get_mouse_position()
             delta_x = current_mouse_x - button.mouse_start_x
             self.game.player.x += delta_x
